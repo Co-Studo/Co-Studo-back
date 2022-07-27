@@ -6,8 +6,15 @@
     "rootDir": ".",
     "strict": true,
     "moduleResolution": "node",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@controllers/*": ["src/controllers/*"],
+      "@routers/*": ["src/routers/*"],
+      "@models/*": ["src/models/*"],
+      "@common/*": ["src/common/*"]
+    }
   },
-  "include": ["src/*.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
