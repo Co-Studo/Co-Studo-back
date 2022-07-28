@@ -23,3 +23,13 @@ export const sendMethodResult = (
   };
   return method;
 };
+
+export const getParamsFormat = (config: object) => {
+  const params = Object.entries(config)
+    .map((param) => {
+      const [key, value] = param;
+      return `${key}=${value}`;
+    })
+    .join('&');
+  return `?${params}`;
+};
