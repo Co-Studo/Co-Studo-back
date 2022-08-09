@@ -33,12 +33,12 @@ export const verify = (token: string) => {
   }
 };
 
-export const refresh = (userId: string) => {
+export const refresh = async (userId: string) => {
   const refreshToken = jwt.sign({ id: userId }, jwtSecretKey, {
     algorithm: 'HS256',
     expiresIn: '14d',
   });
-  redisClient.set(userId, refreshToken);
+  await redisClient.set(userId, refreshToken);
   return refreshToken;
 };
 

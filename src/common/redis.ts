@@ -8,6 +8,8 @@ if (!redisUrl) {
 
 const redisClient = createClient({ url: redisUrl });
 
+redisClient.on('error', (err) => console.log('Redis Client Error', err));
+
 const redisInit = async () => {
   await redisClient.connect();
 };
