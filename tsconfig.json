@@ -12,7 +12,8 @@
       "@controllers/*": ["src/controllers/*"],
       "@routers/*": ["src/routers/*"],
       "@models/*": ["src/models/*"],
-      "@common/*": ["src/common/*"]
+      "@common/*": ["src/common/*"],
+      "@middlewares/*": ["src/middlewares/*"]
     }
   },
   "include": ["src"],
