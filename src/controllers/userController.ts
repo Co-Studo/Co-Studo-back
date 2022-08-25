@@ -3,6 +3,45 @@ import { getDate, getParamsFormat, sendMethodResult } from '@common/utils';
 import User from '@models/User';
 import axios from 'axios';
 
+export const getMe = sendMethodResult(async (req, res) => {
+  const { cookie } = req.headers;
+
+  if (!cookie) throw Error('Not include cookie');
+
+  const matchedAccessToken = cookie.match(/accessToken=\S+/);
+  if (!matchedAccessToken) throw Error('Not include access-token');
+  const accessToken = matchedAccessToken[0].split('=')[1].slice(0, -1);
+
+  const { ok, id } = jwtUtil.verify(accessToken);
+
+  if (!ok) {
+    // refresh
+    const matchedRefreshToken = cookie.match(/refreshToken=\S+/);
+    if (!matchedRefreshToken) throw Error('Not include refresh-token');
+    const refreshToken = matchedRefreshToken[0].split('=')[1].slice(0, -1);
+    const { ok: refreshOk, id: userId } = jwtUtil.verify(refreshToken);
+    if (!refreshOk) {
+      // refresh token 만료
+      throw Error('로그인 정보가 만료되었습니다. 다시 로그인 해주세요.');
+    }
+    if (!userId) throw Error('user not found');
+    const { accessToken: newAccessToken } = await jwtUtil.refreshVerify(
+      refreshToken,
+      userId
+    );
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.cookie('accessToken', newAccessToken, {
+      // maxAge: 120_000,
+      httpOnly: true,
+      secure: true,
+    });
+    const user = await User.findById(userId);
+    return user;
+  }
+  const user = await User.findById(id);
+  return user;
+});
+
 export const getUsers = sendMethodResult(async () => {
   const users = await User.find();
   return users;
@@ -91,14 +130,15 @@ export const githubLogin = sendMethodResult(async (req, res) => {
   }
   const appAccessToken = jwtUtil.sign(newUser._id.toString());
   const appRefreshToken = await jwtUtil.refresh(newUser._id.toString());
+
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.cookie('accessToken', appAccessToken, {
-    maxAge: 120_000,
+    // maxAge: 120_000,
     httpOnly: true,
     secure: true,
   });
   res.cookie('refreshToken', appRefreshToken, {
-    maxAge: 600_000,
+    // maxAge: 600_000,
     httpOnly: true,
     secure: true,
   });

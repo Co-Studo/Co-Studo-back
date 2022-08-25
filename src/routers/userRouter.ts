@@ -1,5 +1,6 @@
 import {
   createUser,
+  getMe,
   getUser,
   getUsers,
   githubLogin,
@@ -9,6 +10,7 @@ import express from 'express';
 const userRouter = express.Router();
 
 userRouter.get('/githubLogin', githubLogin);
+userRouter.get('/me', getMe);
 userRouter.get('/:id', getUser);
 userRouter.get('/', getUsers);
 userRouter.post('/', createUser);
