@@ -30,7 +30,7 @@ export const createUser = sendMethodResult(async (req) => {
 const accessTokenUrl = 'https://github.com/login/oauth/access_token';
 const githubApiUrl = 'https://api.github.com';
 
-export const githubLogin = sendMethodResult(async (req) => {
+export const githubLogin = sendMethodResult(async (req, res) => {
   const { code } = req.query;
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
@@ -51,14 +51,31 @@ export const githubLogin = sendMethodResult(async (req) => {
   );
 
   const { access_token } = tokenRequest.data;
-  console.log(access_token, tokenRequest.data);
-  const userRequest = await axios.get(`${githubApiUrl}/user`, {
+  const {
+    data: { avatar_url, name },
+  } = await axios.get<{ avatar_url: string; name: string }>(
+    `${githubApiUrl}/user`,
+    {
+      headers: {
+        Authorization: `token ${access_token}`,
+      },
+    }
+  );
+
+  const { data: emailData } = await axios.get(`${githubApiUrl}/user/emails`, {
     headers: {
       Authorization: `token ${access_token}`,
     },
   });
 
-  const { email, avatar_url, name } = userRequest.data;
+  const { email } = emailData.find(
+    (emailInfo: { primary: boolean; verified: boolean }) => {
+      const isPrimary = emailInfo.primary === true;
+      const isVerified = emailInfo.verified === true;
+      return isPrimary && isVerified;
+    }
+  );
+
   const existingUser = await User.findOne({ email });
   let newUser;
   if (!existingUser) {
@@ -72,7 +89,17 @@ export const githubLogin = sendMethodResult(async (req) => {
   } else {
     newUser = existingUser;
   }
-  const appAccessToken = jwtUtil.sign(newUser._id);
-  const appRefreshToken = await jwtUtil.refresh(newUser._id);
-  return { accessToken: appAccessToken, refreshToken: appRefreshToken };
+  const appAccessToken = jwtUtil.sign(newUser._id.toString());
+  const appRefreshToken = await jwtUtil.refresh(newUser._id.toString());
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.cookie('accessToken', appAccessToken, {
+    maxAge: 120_000,
+    httpOnly: true,
+    secure: true,
+  });
+  res.cookie('refreshToken', appRefreshToken, {
+    maxAge: 600_000,
+    httpOnly: true,
+    secure: true,
+  });
 });
