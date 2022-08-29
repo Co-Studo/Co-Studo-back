@@ -1,4 +1,4 @@
-import HttpException from '@common/exceptions/http-exception';
+import HttpException from '@common/exceptions/http';
 
 class UnauthorizedException extends HttpException {
   constructor(message = '인증 자격 증명이 유효하지 않습니다.') {

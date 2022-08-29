@@ -3,6 +3,7 @@ import { getDate, getParamsFormat } from '@common/utils';
 import User from '@models/User';
 import axios from 'axios';
 import { Request, Response } from 'express';
+import * as userService from 'src/services/userService';
 
 export const getMe = async (req: Request, res: Response) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -10,49 +11,25 @@ export const getMe = async (req: Request, res: Response) => {
 
   if (!cookie) throw Error('Not include cookie');
 
-  const matchedAccessToken = cookie.match(/accessToken=\S+/);
-  if (!matchedAccessToken) throw Error('Not include access-token');
-  const accessToken = matchedAccessToken[0].split('=')[1].slice(0, -1);
+  const { user, newAccessToken } = await userService.findByCookie(cookie);
 
-  const { ok, id } = jwtUtil.verify(accessToken);
-
-  if (!ok) {
-    // refresh
-    const matchedRefreshToken = cookie.match(/refreshToken=\S+/);
-    if (!matchedRefreshToken) throw Error('Not include refresh-token');
-    const refreshToken = matchedRefreshToken[0].split('=')[1].slice(0, -1);
-    const { ok: refreshOk, id: userId } = jwtUtil.verify(refreshToken);
-    if (!refreshOk) {
-      // refresh token 만료
-      throw Error('로그인 정보가 만료되었습니다. 다시 로그인 해주세요.');
-    }
-    if (!userId) throw Error('user not found');
-    const { accessToken: newAccessToken } = await jwtUtil.refreshVerify(
-      refreshToken,
-      userId
-    );
+  if (newAccessToken) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.cookie('accessToken', newAccessToken, {
       // maxAge: 120_000,
       httpOnly: true,
       secure: true,
     });
-    const user = await User.findById(userId);
-    return user;
   }
-  const user = await User.findById(id);
+
   return user;
 };
 
-export const getUsers = async () => {
-  const users = await User.find();
-  return users;
-};
+export const getUsers = async () => userService.findAll();
 
 export const getUser = async (req: Request) => {
   const { id } = req.params;
-  const user = await User.findById(id);
-  return user;
+  return userService.findById(id);
 };
 
 export const createUser = async (req: Request) => {
