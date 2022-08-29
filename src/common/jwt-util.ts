@@ -10,7 +10,7 @@ if (!jwtSecretKey) {
 export const sign = (userId: string) =>
   jwt.sign({ id: userId }, jwtSecretKey, {
     algorithm: 'HS256',
-    expiresIn: '2m',
+    expiresIn: '2s',
   });
 
 export const verify = (
@@ -38,7 +38,7 @@ export const verify = (
 export const refresh = async (userId: string) => {
   const refreshToken = jwt.sign({ id: userId }, jwtSecretKey, {
     algorithm: 'HS256',
-    expiresIn: '10m',
+    expiresIn: '10s',
   });
   await redisClient.set(userId, refreshToken);
   return refreshToken;

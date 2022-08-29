@@ -1,9 +1,11 @@
 import * as jwtUtil from '@common/jwt-util';
-import { getDate, getParamsFormat, sendMethodResult } from '@common/utils';
+import { getDate, getParamsFormat } from '@common/utils';
 import User from '@models/User';
 import axios from 'axios';
+import { Request, Response } from 'express';
 
-export const getMe = sendMethodResult(async (req, res) => {
+export const getMe = async (req: Request, res: Response) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   const { cookie } = req.headers;
 
   if (!cookie) throw Error('Not include cookie');
@@ -40,20 +42,20 @@ export const getMe = sendMethodResult(async (req, res) => {
   }
   const user = await User.findById(id);
   return user;
-});
+};
 
-export const getUsers = sendMethodResult(async () => {
+export const getUsers = async () => {
   const users = await User.find();
   return users;
-});
+};
 
-export const getUser = sendMethodResult(async (req) => {
+export const getUser = async (req: Request) => {
   const { id } = req.params;
   const user = await User.findById(id);
   return user;
-});
+};
 
-export const createUser = sendMethodResult(async (req) => {
+export const createUser = async (req: Request) => {
   const createdAt = getDate();
   const updatedAt = createdAt;
   const newUserData = {
@@ -64,12 +66,12 @@ export const createUser = sendMethodResult(async (req) => {
   const newUser = await User.create(newUserData);
 
   return newUser;
-});
+};
 
 const accessTokenUrl = 'https://github.com/login/oauth/access_token';
 const githubApiUrl = 'https://api.github.com';
 
-export const githubLogin = sendMethodResult(async (req, res) => {
+export const githubLogin = async (req: Request, res: Response) => {
   const { code } = req.query;
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
@@ -142,4 +144,4 @@ export const githubLogin = sendMethodResult(async (req, res) => {
     httpOnly: true,
     secure: true,
   });
-});
+};

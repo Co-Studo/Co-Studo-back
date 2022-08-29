@@ -15,6 +15,7 @@ export const sendMethodResult = (
       });
     } catch (error) {
       const e = error as Error;
+      res.statusCode = 404;
       res.send({
         ok: false,
         message: e.message,
