@@ -1,3 +1,4 @@
+import { sendMethodResult } from '@common/utils';
 import {
   createUser,
   getMe,
@@ -9,10 +10,10 @@ import express from 'express';
 
 const userRouter = express.Router();
 
-userRouter.get('/githubLogin', githubLogin);
-userRouter.get('/me', getMe);
-userRouter.get('/:id', getUser);
-userRouter.get('/', getUsers);
-userRouter.post('/', createUser);
+userRouter.get('/githubLogin', sendMethodResult(githubLogin));
+userRouter.get('/me', sendMethodResult(getMe));
+userRouter.get('/:id', sendMethodResult(getUser));
+userRouter.get('/', sendMethodResult(getUsers));
+userRouter.post('/', sendMethodResult(createUser));
 
 export default userRouter;

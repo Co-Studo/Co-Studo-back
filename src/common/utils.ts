@@ -1,3 +1,4 @@
+import HttpException from '@common/exceptions/http';
 import { Request, Response } from 'express';
 
 export const getDate = () =>
@@ -14,8 +15,8 @@ export const sendMethodResult = (
         results,
       });
     } catch (error) {
-      const e = error as Error;
-      res.statusCode = 404;
+      const e = error as HttpException;
+      res.statusCode = e.status;
       res.send({
         ok: false,
         message: e.message,

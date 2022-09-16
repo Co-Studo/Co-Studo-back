@@ -1,4 +1,4 @@
-import HttpException from '@common/exceptions/http-exception';
+import HttpException from '@common/exceptions/http';
 
 class NotFoundException extends HttpException {
   constructor(message = '찾을 수 없습니다.') {

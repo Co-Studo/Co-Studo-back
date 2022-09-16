@@ -45,12 +45,13 @@ export const findByCookie = async (
   cookie: string
 ): Promise<{ user: IUser; newAccessToken?: string }> => {
   let newAccessToken;
+  let userId;
 
   const matchedAccessToken = cookie.match(/accessToken=\S+/);
   if (!matchedAccessToken) {
     throw new NotFoundException('Not include access-token');
   }
-  const accessToken = matchedAccessToken[0].split('=')[1].slice(0, -1);
+  const accessToken = matchedAccessToken[0].split('=')[1].replace(';', '');
 
   const { ok, id } = jwtUtil.verify(accessToken);
 
@@ -59,12 +60,14 @@ export const findByCookie = async (
     if (!matchedRefreshToken) {
       throw new NotFoundException('Not include refresh-token');
     }
-    const refreshToken = matchedRefreshToken[0].split('=')[1].slice(0, -1);
+    const refreshToken = matchedRefreshToken[0].split('=')[1].replace(';', '');
     newAccessToken = await refreshAccessToken(refreshToken);
+    const { id: newId } = jwtUtil.verify(newAccessToken);
+    userId = newId;
+  } else {
+    userId = id;
   }
-
-  const user = await User.findById(id);
-
+  const user = await User.findById(userId);
   if (!user) {
     throw new NotFoundException('User Not found by id (find by cookie)');
   }

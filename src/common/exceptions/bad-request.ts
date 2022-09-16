@@ -1,4 +1,4 @@
-import HttpException from '@common/exceptions/http-exception';
+import HttpException from '@common/exceptions/http';
 
 class BadRequestException extends HttpException {
   constructor(message = '잘못된 요청입니다.') {
