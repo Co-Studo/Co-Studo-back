@@ -1,3 +1,8 @@
+/* eslint-disable import/first */
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 import app from './app';
 import './db';
 import './models';

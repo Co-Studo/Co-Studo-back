@@ -1,3 +1,4 @@
+import HttpException from '@common/exceptions/http';
 import { Request, Response } from 'express';
 
 export const getDate = () =>
@@ -14,7 +15,8 @@ export const sendMethodResult = (
         results,
       });
     } catch (error) {
-      const e = error as Error;
+      const e = error as HttpException;
+      res.statusCode = e.status;
       res.send({
         ok: false,
         message: e.message,
@@ -22,4 +24,14 @@ export const sendMethodResult = (
     }
   };
   return method;
+};
+
+export const getParamsFormat = (config: object) => {
+  const params = Object.entries(config)
+    .map((param) => {
+      const [key, value] = param;
+      return `${key}=${value}`;
+    })
+    .join('&');
+  return `?${params}`;
 };
