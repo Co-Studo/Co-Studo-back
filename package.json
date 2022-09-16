@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node dist/init.ts",
     "start:dev": "nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" -r tsconfig-paths/register src/init.ts",
-    "build": "tsc -p .",
-    "prestart": "npm run build"
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
