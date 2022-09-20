@@ -13,7 +13,8 @@
       "@routers/*": ["src/routers/*"],
       "@models/*": ["src/models/*"],
       "@common/*": ["src/common/*"],
-      "@middlewares/*": ["src/middlewares/*"]
+      "@middlewares/*": ["src/middlewares/*"],
+      "@services/*": ["src/services/*"]
     }
   },
   "include": ["src"],
