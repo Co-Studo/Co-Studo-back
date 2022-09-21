@@ -1,6 +1,5 @@
 import HttpException from '@common/exceptions/http';
 import { Request, Response } from 'express';
-import { collection } from 'firebase/firestore/lite';
 
 export const getDate = () =>
   new Date().toISOString().replace('T', ' ').substring(0, 19);
