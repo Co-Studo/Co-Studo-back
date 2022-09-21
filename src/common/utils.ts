@@ -4,12 +4,12 @@ import { Request, Response } from 'express';
 export const getDate = () =>
   new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-export const sendMethodResult = (
-  callback: (req: Request, res: Response) => void
+export const sendMethodResult = <T>(
+  callback: (req: Request, res: Response) => T
 ) => {
   const method = async (req: Request, res: Response) => {
     try {
-      const results = await callback(req, res);
+      const results: T = await callback(req, res);
       res.send({
         ok: true,
         results,
