@@ -1,11 +1,12 @@
 import HttpException from '@common/exceptions/http';
 import { Request, Response } from 'express';
+import { collection } from 'firebase/firestore/lite';
 
 export const getDate = () =>
   new Date().toISOString().replace('T', ' ').substring(0, 19);
 
 export const sendMethodResult = <T>(
-  callback: (req?: Request, res?: Response) => T
+  callback: (req: Request, res: Response) => T
 ) => {
   const method = async (req: Request, res: Response) => {
     try {

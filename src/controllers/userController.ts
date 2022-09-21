@@ -9,3 +9,5 @@ export const getMe = sendMethodResult<Partial<User>>(() => ({
 }));
 
 export const getUsers = async () => userService.findAll();
+
+export const signInWithGithub = async () => userService.githubSignIn();
