@@ -6,7 +6,7 @@ dotenv.config();
 import app from './app';
 import './db';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   console.log(`✅ EXPRESS server is listening on ${PORT}`);
