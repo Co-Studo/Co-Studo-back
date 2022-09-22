@@ -10,4 +10,4 @@ COPY . ./
 RUN npm run build
 RUN rm -rf ./src
 
-CMD [ "npm", "start" ]
+ENTRYPOINT [ "npm", "start" ]
