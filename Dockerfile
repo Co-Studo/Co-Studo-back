@@ -10,4 +10,4 @@ COPY . ./
 RUN npm run build
 RUN rm -rf ./src
 
-RUN npm run start
+CMD [ "node", "build/src/init.js" ]
