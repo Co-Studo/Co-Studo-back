@@ -6,7 +6,12 @@ import express from 'express';
 const app = express();
 
 app.use(cors);
-app.use('/api/user', userRouter);
-app.use('/api/study', studyRouter);
+
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
+app.use('/user', userRouter);
+app.use('/study', studyRouter);
 
 export default app;
