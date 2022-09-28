@@ -1,9 +1,14 @@
-import { signInWithGithub, getMe } from '@controllers/userController';
+import {
+  signInWithGithub,
+  createUser,
+  getUsers,
+} from '@controllers/userController';
 import express from 'express';
 
 const userRouter = express.Router();
 
-userRouter.get('/me', getMe);
+userRouter.post('/create', createUser);
+userRouter.get('/', getUsers);
 userRouter.get('/githubLogin', signInWithGithub);
 
 export default userRouter;

@@ -15,12 +15,22 @@ export const sendMethodResult = <T>(
         results,
       });
     } catch (error) {
-      const e = error as HttpException;
-      res.statusCode = e.status;
-      res.send({
-        ok: false,
-        message: e.message,
-      });
+      if (error instanceof HttpException) {
+        res.status(error.status).send({
+          ok: false,
+          message: error.message,
+        });
+      } else if (error instanceof Error) {
+        res.status(500).send({
+          ok: false,
+          message: error.message,
+        });
+      } else {
+        res.status(500).send({
+          ok: false,
+          message: 'Unknown Error',
+        });
+      }
     }
   };
   return method;

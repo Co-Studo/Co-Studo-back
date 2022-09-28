@@ -12,12 +12,19 @@ const githubApiUrl = 'https://api.github.com';
 //   userService.getMe()
 // );
 
-export const signIn = sendMethodResult(async (req: Request) => {
+export const getUsers = sendMethodResult(async () => {
+  const users = await (await authService.listUsers()).users;
+  return users;
+});
+
+export const createUser = sendMethodResult(async (req: Request) => {
   const { email, password } = req.body;
+  console.log(email, password);
   const newUserRecord = await authService.createUser({
     email,
     password,
   });
+  console.log(newUserRecord);
   return newUserRecord;
 });
 
