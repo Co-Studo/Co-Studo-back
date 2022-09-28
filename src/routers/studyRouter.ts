@@ -1,8 +1,8 @@
-import { getCheckInsByStudyId } from '@controllers/studyController';
-import express from 'express';
+// import { getCheckInsByStudyId } from '@controllers/studyController';
+// import express from 'express';
 
-const studyRouter = express.Router();
+// const studyRouter = express.Router();
 
-studyRouter.get('/:id/checkin', getCheckInsByStudyId);
+// studyRouter.get('/:id/checkin', getCheckInsByStudyId);
 
-export default studyRouter;
+// export default studyRouter;

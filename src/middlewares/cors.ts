@@ -4,6 +4,7 @@ const cors = (req: Request, res: Response, next: NextFunction) => {
   const origins = ['http://localhost:8801'];
   if (req.headers.origin && origins.includes(req.headers.origin)) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
   }
   next();
 };
