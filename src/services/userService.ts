@@ -1,26 +1,15 @@
-import { User } from '@common/entities/User';
-import { getAuth, GithubAuthProvider, signInWithRedirect } from 'firebase/auth';
+import { authService } from 'src/firebaseApp';
 
-// not working
-export const githubSignIn = async () => {
-  const provider = new GithubAuthProvider();
-  provider.setCustomParameters({
-    allow_signup: 'false',
-  });
-  const auth = getAuth();
-  const result = await signInWithRedirect(auth, provider);
-
-  if (result) {
-    console.log(result);
+export const getUserByEmail = async (email: string) => {
+  try {
+    const user = await authService.getUserByEmail(email);
+    return user;
+  } catch (e) {
+    return null;
   }
 };
 
-export const findAll = async (): Promise<User[]> => [];
-
-export const findById = async (id: string): Promise<User> => ({
-  email: 'asd',
-  nickname: 'asd',
-  avatartUrl: 'asd',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-});
+export const getUsers = async () => {
+  const users = await (await authService.listUsers()).users;
+  return users.map((user) => ({ email: user.email }));
+};
