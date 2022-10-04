@@ -9,14 +9,7 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-export const getMe = async (idToken: string) => {
-  // get user by firebase auth token
-  const decodedIdToken = await authService.verifyIdToken(idToken);
-  console.log(decodedIdToken);
+export const getUsers = async () => {
+  const users = await (await authService.listUsers()).users;
+  return users.map((user) => ({ email: user.email }));
 };
-
-// export const getMe = () => {
-//   const me = authService;
-//   console.log(me);
-//   return me;
-// };
