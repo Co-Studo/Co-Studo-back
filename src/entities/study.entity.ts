@@ -2,7 +2,6 @@ import { Tag } from '@entities/tag.entity';
 import { User } from '@entities/user.entity';
 
 export type Study = {
-  id: string;
   title: string;
   shortDescription: string;
   description: string;
