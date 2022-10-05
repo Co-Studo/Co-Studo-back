@@ -1,15 +1,19 @@
-import { authService } from 'src/firebaseApp';
+import { db } from 'src/firebaseApp';
+
+const usersRef = db.collection('users');
 
 export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await authService.getUserByEmail(email);
-    return user;
-  } catch (e) {
-    return null;
+  const snapshot = await usersRef.where('email', '==', email).get();
+  if (snapshot.empty) {
+    throw Error('No matching documents.');
   }
+  return snapshot.docs.map((doc) => doc.data());
 };
 
 export const getUsers = async () => {
-  const users = await (await authService.listUsers()).users;
-  return users.map((user) => ({ email: user.email }));
+  const snapshot = await usersRef.get();
+  if (snapshot.empty) {
+    throw Error('No matching documents.');
+  }
+  return snapshot.docs.map((doc) => doc.data());
 };

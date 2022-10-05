@@ -1,8 +1,12 @@
-// import { getCheckInsByStudyId } from '@controllers/studyController';
-// import express from 'express';
+import { getRecruitingStudies, postStudy } from '@controllers/studyController';
+import express from 'express';
 
-// const studyRouter = express.Router();
+const studyRouter = express.Router();
 
-// studyRouter.get('/:id/checkin', getCheckInsByStudyId);
+// GET
+studyRouter.get('/recruit', getRecruitingStudies);
 
-// export default studyRouter;
+// POST
+studyRouter.post('/', postStudy);
+
+export default studyRouter;

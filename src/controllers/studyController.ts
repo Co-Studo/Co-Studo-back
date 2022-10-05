@@ -1,13 +1,29 @@
-// import { sendMethodResult } from '@common/utils';
-// import * as studyService from '@services/studyService';
-// import { Request } from 'express';
+import { sendMethodResult } from '@common/utils';
+import { CreateStudyInput } from '@dtos/create-study.dto';
+import * as studyService from '@services/studyService';
+import * as userService from '@services/userService';
 
-// export const getCheckInsByStudyId = sendMethodResult(async (req) => {
-//   const { id: studyId } = req.params;
-//   return studyService.getCheckIns(studyId);
-// });
+export const postStudy = sendMethodResult(async (req) => {
+  const tempUser = await userService.getUserByEmail('test@test.com');
+  const owner = tempUser;
+  const {
+    body: { tagIds, startedAt, endedAt, ...restInput },
+  } = req;
 
-// export const getCheckOutsByStudyId = sendMethodResult(async (req: Request) => {
-//   const { id: studyId } = req.params;
-//   return studyService.getCheckOuts(studyId);
-// });
+  const tags = await Promise.all(
+    tagIds.map((tagId: string) => studyService.getTagById(tagId))
+  );
+
+  const studyInput: CreateStudyInput = {
+    owner,
+    tags,
+    startedAt: startedAt || new Date(),
+    endedAt: endedAt || null,
+    ...restInput,
+  };
+  return studyService.createStudy(studyInput);
+});
+
+export const getRecruitingStudies = sendMethodResult(async () =>
+  studyService.getRecruitingStudies()
+);

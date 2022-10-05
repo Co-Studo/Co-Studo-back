@@ -1,32 +1,40 @@
-// import { collection, getDocs, query, where } from 'firebase/firestore/lite';
-// import db from 'src/db';
+import { CreateStudyInput } from '@dtos/create-study.dto';
+import { db } from 'src/firebaseApp';
 
-// type CheckIn = {
-//   studyId: string;
-//   userId: string;
-//   checkinAt: Date;
-// };
+const studyRef = db.collection('study');
 
-// type CheckOut = {
-//   studyId: string;
-//   userId: string;
-//   checkoutAt: Date;
-// };
+export const createStudy = async (studyInput: CreateStudyInput) => {
+  const defaultStudyInput = {
+    isRecruiting: true,
+    participants: [],
+  };
+  const study = await studyRef.add({
+    ...defaultStudyInput,
+    ...studyInput,
+  });
+  return study;
+};
 
-// export const getCheckIns = async (studyId: string): Promise<CheckIn[]> => {
-//   const checkInQuery = query(
-//     collection(db, 'checkin'),
-//     where('studyId', '==', studyId)
-//   );
-//   const checkInSnapshot = await getDocs(checkInQuery);
-//   return checkInSnapshot.docs.map((doc) => doc.data() as CheckIn);
-// };
+export const getRecruitingStudies = async () => {
+  const snapshot = await studyRef.where('isRecruiting', '==', true).get();
+  if (snapshot.empty) {
+    throw Error('No matching documents.');
+  }
+  return snapshot.docs.map((doc) => doc.data());
+};
 
-// export const getCheckOuts = async (studyId: string): Promise<CheckOut[]> => {
-//   const checkOutQuery = query(
-//     collection(db, 'checkOut'),
-//     where('studyId', '==', studyId)
-//   );
-//   const checkOutSnapshot = await getDocs(checkOutQuery);
-//   return checkOutSnapshot.docs.map((doc) => doc.data() as CheckOut);
-// };
+export const getTags = async () => {
+  const snapshot = await db.collection('tag').get();
+  if (snapshot.empty) {
+    throw Error('No matching documents.');
+  }
+  return snapshot.docs.map((doc) => doc.data());
+};
+
+export const getTagById = async (tagId: string) => {
+  const snapshot = await db.collection('tag').doc(tagId).get();
+  if (!snapshot.exists) {
+    throw Error('No matching documents.');
+  }
+  return snapshot.data();
+};

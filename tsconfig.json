@@ -14,7 +14,9 @@
       "@models/*": ["src/models/*"],
       "@common/*": ["src/common/*"],
       "@middlewares/*": ["src/middlewares/*"],
-      "@services/*": ["src/services/*"]
+      "@services/*": ["src/services/*"],
+      "@entities/*": ["src/entities/*"],
+      "@dtos/*": ["src/dtos/*"]
     }
   },
   "include": ["src"],
