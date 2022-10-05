@@ -1,6 +1,6 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
-import { CreateStudyInput } from '@dtos/create-study.dto';
 import { CreateTagInput } from '@dtos/create-tag.dto';
+import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
@@ -9,6 +9,14 @@ const tagRef = db.collection('tag');
 export const createTag = async (tagInput: CreateTagInput) => {
   const tag = await tagRef.add(tagInput);
   return tag;
+};
+
+export const updateStudy = async (
+  studyId: string,
+  studyInput: UpdateStudyInput
+) => {
+  const study = await studyRef.doc(studyId).update(studyInput);
+  return study;
 };
 
 export const createStudy = async (studyInput: CreateStudyInput) => {

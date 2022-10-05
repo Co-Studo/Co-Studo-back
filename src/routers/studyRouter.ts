@@ -1,5 +1,6 @@
 import {
   getRecruitingStudies,
+  patchStudy,
   postStudy,
   postTag,
 } from '@controllers/studyController';
@@ -13,5 +14,8 @@ studyRouter.get('/recruit', getRecruitingStudies);
 // POST
 studyRouter.post('/', postStudy);
 studyRouter.post('/tag', postTag);
+
+// PATCH
+studyRouter.patch('/:studyId', patchStudy);
 
 export default studyRouter;
