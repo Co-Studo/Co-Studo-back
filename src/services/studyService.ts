@@ -1,9 +1,15 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
 import { CreateStudyInput } from '@dtos/create-study.dto';
+import { CreateTagInput } from '@dtos/create-tag.dto';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
 const tagRef = db.collection('tag');
+
+export const createTag = async (tagInput: CreateTagInput) => {
+  const tag = await tagRef.add(tagInput);
+  return tag;
+};
 
 export const createStudy = async (studyInput: CreateStudyInput) => {
   const defaultStudyInput = {
