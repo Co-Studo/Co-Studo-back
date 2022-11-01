@@ -22,11 +22,8 @@ export const getUsers = async () => {
 
 export const createUser = async (userInput: CreateUserInput) => {
   const { uid, ...restInput } = userInput;
-  const defaultUserInput = {
-    studies: [],
-  };
+
   const createUserData = {
-    ...defaultUserInput,
     ...restInput,
   };
   const user = await usersRef.doc(uid).set(createUserData);

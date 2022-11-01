@@ -1,4 +1,3 @@
-import { Comment } from '@entities/comment.entity';
 import { User } from '@entities/user.entity';
 
 export type Announcement = {
@@ -7,5 +6,4 @@ export type Announcement = {
   title: string;
   content: string;
   isFixed: boolean;
-  comments: Comment[];
 };

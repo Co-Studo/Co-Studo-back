@@ -1,4 +1,3 @@
-import { Announcement } from '@entities/announcement.entity';
 import { Tag } from '@entities/tag.entity';
 import { User } from '@entities/user.entity';
 
@@ -7,7 +6,6 @@ export type Study = {
   shortDescription: string;
   description: string;
   owner: User;
-  participants: User[];
   maxParticipants?: number;
   tags: Tag[];
   isRecruiting: boolean;
@@ -17,6 +15,4 @@ export type Study = {
   isRequireCheckIn: boolean;
   isRequireCheckOut: boolean;
   isCheckOutIsArticle: boolean;
-  //   articles?: Article[];
-  announcements: Announcement[];
 };
