@@ -28,7 +28,6 @@ export const createStudy = async (studyInput: CreateStudyInput) => {
     participants: [],
     announcements: [],
   };
-  console.log('hi');
   const study = await studyRef.add({
     ...defaultStudyInput,
     ...studyInput,
