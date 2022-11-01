@@ -1,3 +1,4 @@
+import { Announcement } from '@entities/announcement.entity';
 import { Tag } from '@entities/tag.entity';
 import { User } from '@entities/user.entity';
 
@@ -17,5 +18,5 @@ export type Study = {
   isRequireCheckOut: boolean;
   isCheckOutIsArticle: boolean;
   //   articles?: Article[];
-  //   announcements: Announcement[];
+  announcements: Announcement[];
 };

@@ -29,23 +29,30 @@ export const postStudy = sendMethodResult(async (req) => {
   const tempUser = await userService.getUserByEmail('test@test.com');
   const owner = tempUser;
   const {
-    body: { tagIds, startedAt, endedAt, ...restInput },
+    body: { tagIds, ...restInput },
   } = req;
 
-  const tags = await Promise.all(
-    tagIds.map((tagId: string) => studyService.getTagById(tagId))
-  );
+  const tags = tagIds
+    ? await Promise.all(
+        tagIds.map((tagId: string) => studyService.getTagById(tagId))
+      )
+    : [];
 
   const studyInput: CreateStudyInput = {
     owner,
     tags,
-    startedAt: startedAt || new Date(),
-    endedAt: endedAt || null,
     ...restInput,
   };
   return studyService.createStudy(studyInput);
 });
 
-export const getRecruitingStudies = sendMethodResult(async () =>
-  studyService.getRecruitingStudies()
-);
+export const getStudies = sendMethodResult(async (req) => {
+  const { recruiting } = req.query;
+  return studyService.getStudies(Boolean(recruiting));
+});
+
+export const getStudyAnnouncement = sendMethodResult(async (req) => {
+  const { isFixed } = req.query;
+  const { studyId } = req.params;
+  return studyService.getStudyAnnouncement(studyId, Boolean(isFixed));
+});

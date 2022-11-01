@@ -1,5 +1,6 @@
 import {
-  getRecruitingStudies,
+  getStudies,
+  getStudyAnnouncement,
   patchStudy,
   postStudy,
   postTag,
@@ -9,7 +10,8 @@ import express from 'express';
 const studyRouter = express.Router();
 
 // GET
-studyRouter.get('/recruit', getRecruitingStudies);
+studyRouter.get('/', getStudies);
+studyRouter.get('/:studyId/announcement', getStudyAnnouncement);
 
 // POST
 studyRouter.post('/', postStudy);

@@ -21,9 +21,14 @@ export const updateStudy = async (
 
 export const createStudy = async (studyInput: CreateStudyInput) => {
   const defaultStudyInput = {
+    isPublic: true,
     isRecruiting: true,
+    startedAt: new Date(),
+    tags: [],
     participants: [],
+    announcements: [],
   };
+  console.log('hi');
   const study = await studyRef.add({
     ...defaultStudyInput,
     ...studyInput,
@@ -31,10 +36,13 @@ export const createStudy = async (studyInput: CreateStudyInput) => {
   return study;
 };
 
-export const getRecruitingStudies = async () => {
-  const snapshot = await studyRef.where('isRecruiting', '==', true).get();
+export const getStudies = async (recruiting: boolean) => {
+  const snapshot = await studyRef.get();
   if (snapshot.empty) {
-    throw new NoMatchingDocuments('getRecruitingStudies');
+    throw new NoMatchingDocuments('getStudies');
+  }
+  if (recruiting) {
+    return snapshot.docs.filter((doc) => doc.data().isRecruiting);
   }
   return snapshot.docs.map((doc) => doc.data());
 };
@@ -53,4 +61,19 @@ export const getTagById = async (tagId: string) => {
     throw new NoMatchingDocuments('getTagById');
   }
   return snapshot.data();
+};
+
+export const getStudyAnnouncement = async (
+  studyId: string,
+  isFixed: boolean
+) => {
+  const snapshot = await studyRef
+    .doc(studyId)
+    .collection('announcement')
+    .where('isFixed', '==', isFixed)
+    .get();
+  if (snapshot.empty) {
+    throw new NoMatchingDocuments('getStudyAnnouncement');
+  }
+  return snapshot.docs.map((doc) => doc.data());
 };
