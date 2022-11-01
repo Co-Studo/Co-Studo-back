@@ -1,9 +1,9 @@
+import { postTag } from '@controllers/study/tagController';
 import {
   getStudies,
   getStudyAnnouncement,
   patchStudy,
   postStudy,
-  postTag,
 } from '@controllers/studyController';
 import express from 'express';
 
@@ -15,9 +15,13 @@ studyRouter.get('/:studyId/announcement', getStudyAnnouncement);
 
 // POST
 studyRouter.post('/', postStudy);
-studyRouter.post('/tag', postTag);
 
 // PATCH
 studyRouter.patch('/:studyId', patchStudy);
+
+// ----------- tag -------------- //
+studyRouter.post('/tag', postTag);
+
+// ----------- announcement -------------- //
 
 export default studyRouter;
