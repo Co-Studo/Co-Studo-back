@@ -1,7 +1,10 @@
+import {
+  getAnnouncementsByStudyId,
+  postAnnouncement,
+} from '@controllers/study/announcementController';
 import { postTag } from '@controllers/study/tagController';
 import {
   getStudies,
-  getStudyAnnouncement,
   patchStudy,
   postStudy,
 } from '@controllers/studyController';
@@ -11,7 +14,6 @@ const studyRouter = express.Router();
 
 // GET
 studyRouter.get('/', getStudies);
-studyRouter.get('/:studyId/announcement', getStudyAnnouncement);
 
 // POST
 studyRouter.post('/', postStudy);
@@ -23,5 +25,7 @@ studyRouter.patch('/:studyId', patchStudy);
 studyRouter.post('/tag', postTag);
 
 // ----------- announcement -------------- //
+studyRouter.get('/:studyId/announcement', getAnnouncementsByStudyId);
+studyRouter.post('/:studyId/announcement', postAnnouncement);
 
 export default studyRouter;

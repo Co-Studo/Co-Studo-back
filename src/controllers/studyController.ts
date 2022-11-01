@@ -45,9 +45,3 @@ export const getStudies = sendMethodResult(async (req) => {
   const { recruiting } = req.query;
   return studyService.getStudies(Boolean(recruiting));
 });
-
-export const getStudyAnnouncement = sendMethodResult(async (req) => {
-  const { isFixed } = req.query;
-  const { studyId } = req.params;
-  return studyService.getStudyAnnouncement(studyId, Boolean(isFixed));
-});

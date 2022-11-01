@@ -38,18 +38,3 @@ export const getStudies = async (recruiting: boolean) => {
   }
   return snapshot.docs.map((doc) => doc.data());
 };
-
-export const getStudyAnnouncement = async (
-  studyId: string,
-  isFixed: boolean
-) => {
-  const snapshot = await studyRef
-    .doc(studyId)
-    .collection('announcement')
-    .where('isFixed', '==', isFixed)
-    .get();
-  if (snapshot.empty) {
-    throw new NoMatchingDocuments('getStudyAnnouncement');
-  }
-  return snapshot.docs.map((doc) => doc.data());
-};
