@@ -1,3 +1,4 @@
+import { CoreEntity } from '@entities/core.entity';
 import { User } from '@entities/user.entity';
 
 export type Announcement = {
@@ -6,4 +7,4 @@ export type Announcement = {
   title: string;
   content: string;
   isFixed: boolean;
-};
+} & CoreEntity;

@@ -4,3 +4,5 @@ export type CreateAnnouncementInput = Pick<
   Announcement,
   'title' | 'content' | 'isFixed'
 >;
+
+export type UpdateAnnouncementInput = Partial<CreateAnnouncementInput>;

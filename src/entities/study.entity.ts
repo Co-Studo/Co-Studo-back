@@ -1,3 +1,4 @@
+import { CoreEntity } from '@entities/core.entity';
 import { Tag } from '@entities/tag.entity';
 import { User } from '@entities/user.entity';
 
@@ -15,4 +16,4 @@ export type Study = {
   isRequireCheckIn: boolean;
   isRequireCheckOut: boolean;
   isCheckOutIsArticle: boolean;
-};
+} & CoreEntity;

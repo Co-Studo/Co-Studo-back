@@ -24,6 +24,8 @@ export const createStudy = async (studyInput: CreateStudyInput) => {
   const newStudyInput: Study = {
     ...defaultStudyInput,
     ...studyInput,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const study = await studyRef.add(newStudyInput);

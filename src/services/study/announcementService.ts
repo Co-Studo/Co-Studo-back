@@ -1,8 +1,29 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
-import { CreateAnnouncementInput } from '@dtos/create-announcement.dto';
+import {
+  CreateAnnouncementInput,
+  UpdateAnnouncementInput,
+} from '@dtos/announcement.dto';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
+
+export const updateAnnouncement = async (
+  studyId: string,
+  announcementId: string,
+  announcementInput: UpdateAnnouncementInput
+) => {
+  const updateInput = {
+    ...announcementInput,
+    updatedAt: new Date(),
+  };
+
+  const announcement = await studyRef
+    .doc(studyId)
+    .collection('announcements')
+    .doc(announcementId)
+    .update(updateInput);
+  return announcement;
+};
 
 export const createAnnouncement = async (
   studyId: string,
@@ -43,5 +64,7 @@ export const getAnnouncementsByStudyId = async (
     throw new NoMatchingDocuments('getAnnouncementsByStudyId');
   }
 
-  return snapshot.docs.map((doc) => doc.data());
+  return snapshot.docs
+    .map((doc) => doc.data())
+    .sort((a, b) => b.order - a.order);
 };
