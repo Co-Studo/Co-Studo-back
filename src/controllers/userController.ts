@@ -7,3 +7,8 @@ export const getUserByEmail = sendMethodResult(async (req) => {
   const { email } = req.params;
   return userService.getUserByEmail(email);
 });
+
+export const postUser = sendMethodResult(async (req) => {
+  const { body } = req;
+  return userService.createUser(body);
+});

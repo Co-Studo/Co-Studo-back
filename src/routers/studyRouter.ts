@@ -1,8 +1,33 @@
-// import { getCheckInsByStudyId } from '@controllers/studyController';
-// import express from 'express';
+import {
+  getAnnouncementsByStudyId,
+  patchAnnouncement,
+  postAnnouncement,
+} from '@controllers/study/announcementController';
+import { postTag } from '@controllers/study/tagController';
+import {
+  getStudies,
+  patchStudy,
+  postStudy,
+} from '@controllers/studyController';
+import express from 'express';
 
-// const studyRouter = express.Router();
+const studyRouter = express.Router();
 
-// studyRouter.get('/:id/checkin', getCheckInsByStudyId);
+// GET
+studyRouter.get('/', getStudies);
 
-// export default studyRouter;
+// POST
+studyRouter.post('/', postStudy);
+
+// PATCH
+studyRouter.patch('/:studyId', patchStudy);
+
+// ----------- tag -------------- //
+studyRouter.post('/tag', postTag);
+
+// ----------- announcement -------------- //
+studyRouter.get('/:studyId/announcement', getAnnouncementsByStudyId);
+studyRouter.post('/:studyId/announcement', postAnnouncement);
+studyRouter.patch('/:studyId/announcement/:announcementId', patchAnnouncement);
+
+export default studyRouter;

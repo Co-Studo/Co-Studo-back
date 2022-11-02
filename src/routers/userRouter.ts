@@ -1,16 +1,12 @@
-import {
-  signInWithGithub,
-  createUser,
-  getUsers,
-  login,
-} from '@controllers/userController';
+import { getUsers, postUser } from '@controllers/userController';
 import express from 'express';
 
 const userRouter = express.Router();
 
-userRouter.post('/create', createUser);
-userRouter.post('/login', login);
+// GET
 userRouter.get('/', getUsers);
-userRouter.get('/githubLogin', signInWithGithub);
+
+// POST
+userRouter.post('/', postUser);
 
 export default userRouter;

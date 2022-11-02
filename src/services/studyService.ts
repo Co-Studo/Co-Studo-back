@@ -1,32 +1,44 @@
-// import { collection, getDocs, query, where } from 'firebase/firestore/lite';
-// import db from 'src/db';
+import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
+import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
+import { Study } from '@entities/study.entity';
+import { db } from 'src/firebaseApp';
 
-// type CheckIn = {
-//   studyId: string;
-//   userId: string;
-//   checkinAt: Date;
-// };
+const studyRef = db.collection('study');
 
-// type CheckOut = {
-//   studyId: string;
-//   userId: string;
-//   checkoutAt: Date;
-// };
+export const updateStudy = async (
+  studyId: string,
+  studyInput: UpdateStudyInput
+) => {
+  const study = await studyRef.doc(studyId).update(studyInput);
+  return study;
+};
 
-// export const getCheckIns = async (studyId: string): Promise<CheckIn[]> => {
-//   const checkInQuery = query(
-//     collection(db, 'checkin'),
-//     where('studyId', '==', studyId)
-//   );
-//   const checkInSnapshot = await getDocs(checkInQuery);
-//   return checkInSnapshot.docs.map((doc) => doc.data() as CheckIn);
-// };
+export const createStudy = async (studyInput: CreateStudyInput) => {
+  const defaultStudyInput = {
+    isPublic: true,
+    isRecruiting: true,
+    startedAt: new Date(),
+    tags: [],
+  };
 
-// export const getCheckOuts = async (studyId: string): Promise<CheckOut[]> => {
-//   const checkOutQuery = query(
-//     collection(db, 'checkOut'),
-//     where('studyId', '==', studyId)
-//   );
-//   const checkOutSnapshot = await getDocs(checkOutQuery);
-//   return checkOutSnapshot.docs.map((doc) => doc.data() as CheckOut);
-// };
+  const newStudyInput: Study = {
+    ...defaultStudyInput,
+    ...studyInput,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  const study = await studyRef.add(newStudyInput);
+  return study;
+};
+
+export const getStudies = async (recruiting: boolean) => {
+  const snapshot = await studyRef.get();
+  if (snapshot.empty) {
+    throw new NoMatchingDocuments('getStudies');
+  }
+  if (recruiting) {
+    return snapshot.docs.filter((doc) => doc.data().isRecruiting);
+  }
+  return snapshot.docs.map((doc) => doc.data());
+};

@@ -1,5 +1,5 @@
 import cors from '@middlewares/cors';
-// import studyRouter from '@routers/studyRouter';
+import studyRouter from '@routers/studyRouter';
 import userRouter from '@routers/userRouter';
 import express from 'express';
 
@@ -15,6 +15,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/user', userRouter);
-// app.use('/study', studyRouter);
+app.use('/study', studyRouter);
 
 export default app;
