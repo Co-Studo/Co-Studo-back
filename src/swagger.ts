@@ -1,6 +1,8 @@
 import swaggereJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+const apisRoot = process.env.DEPLOY === 'yes' ? './build/src' : './src';
+
 const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
@@ -10,7 +12,7 @@ const options = {
       description: 'Co-Studo API with express',
     },
   },
-  apis: ['./src/app.ts', './src/routers/*', './src/entities/*'],
+  apis: [`${apisRoot}/routers/*`, `${apisRoot}/entities/*`],
 };
 
 const specs = swaggereJsdoc(options);
