@@ -37,8 +37,12 @@ export const getStudies = async (recruiting: boolean) => {
   if (snapshot.empty) {
     throw new NoMatchingDocuments('getStudies');
   }
+  const datas: FirebaseFirestore.DocumentData[] = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
   if (recruiting) {
-    return snapshot.docs.filter((doc) => doc.data().isRecruiting);
+    return datas.filter((data) => data.isRecruiting);
   }
-  return snapshot.docs.map((doc) => doc.data());
+  return datas;
 };
