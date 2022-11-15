@@ -6,6 +6,7 @@ import {
 import { postTag } from '@controllers/study/tagController';
 import {
   getStudies,
+  getStudiesMine,
   patchStudy,
   postStudy,
 } from '@controllers/studyController';
@@ -32,6 +33,8 @@ const studyRouter = express.Router();
  *         description: 스터디 목록 조회 성공
  */
 studyRouter.get('/', getStudies);
+
+studyRouter.get('/mine', getStudiesMine);
 
 // POST
 studyRouter.post('/', postStudy);

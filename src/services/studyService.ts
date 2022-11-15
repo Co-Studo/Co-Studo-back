@@ -1,6 +1,6 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
 import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
-import { Study } from '@entities/study.entity';
+import * as userService from '@services/userService';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
@@ -21,7 +21,7 @@ export const createStudy = async (studyInput: CreateStudyInput) => {
     tags: [],
   };
 
-  const newStudyInput: Study = {
+  const newStudyInput: CreateStudyInput = {
     ...defaultStudyInput,
     ...studyInput,
     createdAt: new Date(),
@@ -45,4 +45,9 @@ export const getStudies = async (recruiting: boolean) => {
     return datas.filter((data) => data.isRecruiting);
   }
   return datas;
+};
+
+export const getStudiesMine = async (uid: string) => {
+  const user = await userService.getUser(uid);
+  return user.studyIds.map((studyId) => studyRef.doc(studyId).get());
 };
