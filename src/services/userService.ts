@@ -1,31 +1,23 @@
-import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
-import { CreateUserInput } from '@dtos/create-user.dto';
+import { User } from '@entities/user.entity';
 import { db } from 'src/firebaseApp';
 
-const usersRef = db.collection('users');
+const userRef = db.collection('user');
 
-export const getUserByEmail = async (email: string) => {
-  const snapshot = await usersRef.where('email', '==', email).get();
-  if (snapshot.empty) {
-    throw new NoMatchingDocuments('getUserByEmail');
+export const getUser = async (uid: string): Promise<User> => {
+  const snapshot = await userRef.doc(uid).get();
+  if (!snapshot.exists) {
+    throw new Error('No matching documents.');
   }
-  return snapshot.docs.map((doc) => doc.data());
-};
 
-export const getUsers = async () => {
-  const snapshot = await usersRef.get();
-  if (snapshot.empty) {
-    throw new NoMatchingDocuments('getUsers');
-  }
-  return snapshot.docs.map((doc) => doc.data());
-};
+  const user = {
+    id: snapshot.id,
+    ...snapshot.data(),
+  } as User;
 
-export const createUser = async (userInput: CreateUserInput) => {
-  const { uid, ...restInput } = userInput;
-
-  const createUserData = {
-    ...restInput,
-  };
-  const user = await usersRef.doc(uid).set(createUserData);
   return user;
+};
+
+export const createUser = async (uId: string) => {
+  const newUser = await userRef.doc(uId).set({ studyIds: [] });
+  return newUser;
 };

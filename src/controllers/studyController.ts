@@ -1,8 +1,10 @@
+import IdTokenExpired from '@common/exceptions/id-token-expired';
 import { sendMethodResult } from '@common/utils';
 import { CreateStudyInput } from '@dtos/study.dto';
 import * as tagService from '@services/study/tagService';
 import * as studyService from '@services/studyService';
-import * as userService from '@services/userService';
+import { FirebaseError } from 'firebase-admin';
+import { authService } from 'src/firebaseApp';
 
 export const patchStudy = sendMethodResult(async (req) => {
   const {
@@ -21,7 +23,7 @@ export const patchStudy = sendMethodResult(async (req) => {
 });
 
 export const postStudy = sendMethodResult(async (req) => {
-  const tempUser = await userService.getUserByEmail('test@test.com');
+  const tempUser = await authService.getUserByEmail('test@test.com');
   const owner = tempUser;
   const {
     body: { tagIds, ...restInput },
@@ -44,4 +46,24 @@ export const postStudy = sendMethodResult(async (req) => {
 export const getStudies = sendMethodResult(async (req) => {
   const { recruiting } = req.query;
   return studyService.getStudies(Boolean(recruiting));
+});
+
+export const getStudiesMine = sendMethodResult(async (req) => {
+  try {
+    const { authorization } = req.headers;
+    const accessToken = authorization?.split(' ')[1];
+
+    if (!accessToken) {
+      throw new Error('accessToken is required');
+    }
+    const { uid } = await authService.verifyIdToken(accessToken);
+    return await studyService.getStudiesMine(uid);
+  } catch (e) {
+    const error = e as FirebaseError;
+    if (error.code === 'auth/id-token-expired') {
+      throw new IdTokenExpired();
+    } else {
+      throw new Error(error.message);
+    }
+  }
 });

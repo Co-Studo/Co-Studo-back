@@ -11,6 +11,14 @@ const options = {
       version: '1.0.0',
       description: 'Co-Studo API with express',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+        },
+      },
+    },
   },
   apis: [`${apisRoot}/routers/*`, `${apisRoot}/entities/*`],
 };
