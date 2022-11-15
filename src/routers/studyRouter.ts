@@ -34,6 +34,18 @@ const studyRouter = express.Router();
  */
 studyRouter.get('/', getStudies);
 
+/**
+ * @openapi
+ * /study/mine:
+ *   get:
+ *     tags: [Study]
+ *     description: 나의 참여중인 스터디 목록 조회
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: 스터디 목록 조회 성공
+ */
 studyRouter.get('/mine', getStudiesMine);
 
 // POST

@@ -49,5 +49,11 @@ export const getStudies = async (recruiting: boolean) => {
 
 export const getStudiesMine = async (uid: string) => {
   const user = await userService.getUser(uid);
-  return user.studyIds.map((studyId) => studyRef.doc(studyId).get());
+  const snapshots = await Promise.all(
+    user.studyIds.map((studyId) => studyRef.doc(studyId).get())
+  );
+  return snapshots.map((snapshot) => ({
+    id: snapshot.id,
+    ...snapshot.data(),
+  }));
 };

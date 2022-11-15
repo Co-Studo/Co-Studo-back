@@ -56,7 +56,6 @@ export const getStudiesMine = sendMethodResult(async (req) => {
     if (!accessToken) {
       throw new Error('accessToken is required');
     }
-
     const { uid } = await authService.verifyIdToken(accessToken);
     return await studyService.getStudiesMine(uid);
   } catch (e) {

@@ -1,6 +1,13 @@
 import { sendMethodResult } from '@common/utils';
 import * as userService from '@services/userService';
-import { authService } from 'src/firebaseApp';
+import { authService, createIdTokenFromCustomToken } from 'src/firebaseApp';
+
+export const getTempUserToken = sendMethodResult(async () => {
+  const token = await createIdTokenFromCustomToken(
+    'drArNNfiuFf4UhpLhDiBK0Q41c22'
+  );
+  return token;
+});
 
 export const getUsers = sendMethodResult(async () => authService.getUsers([]));
 
