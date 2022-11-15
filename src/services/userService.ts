@@ -18,6 +18,6 @@ export const getUser = async (uid: string): Promise<User> => {
 };
 
 export const createUser = async (uId: string) => {
-  const newUser = await userRef.doc(uId).set({ studyId: [] });
+  const newUser = await userRef.doc(uId).set({ studyIds: [] });
   return newUser;
 };
