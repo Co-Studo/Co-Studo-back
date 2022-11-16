@@ -1,6 +1,6 @@
 import { CoreEntity } from '@entities/core.entity';
 import { Tag } from '@entities/tag.entity';
-import { User } from '@entities/user.entity';
+import { AuthUser } from '@entities/user.entity';
 
 /**
  * @swagger
@@ -19,7 +19,7 @@ import { User } from '@entities/user.entity';
  *       type: string
  *       description: 스터디 설명
  *      owner:
- *       type: string
+ *       type: $ref: '#/components/schemas/User'
  *       description: 스터디장
  *      maxParticipants:
  *       type: number
@@ -76,7 +76,8 @@ export type Study = {
   title: string;
   shortDescription: string;
   description: string;
-  owner: User;
+  owner: AuthUser;
+  participants: AuthUser[];
   maxParticipants?: number;
   tags: Tag[];
   isRecruiting: boolean;

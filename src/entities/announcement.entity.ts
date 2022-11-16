@@ -1,5 +1,5 @@
 import { CoreEntity } from '@entities/core.entity';
-import { User } from '@entities/user.entity';
+import { AuthUser } from '@entities/user.entity';
 
 /**
  * @swagger
@@ -37,7 +37,7 @@ import { User } from '@entities/user.entity';
 
 export type Announcement = {
   order: number;
-  writer: string;
+  writer: AuthUser;
   title: string;
   content: string;
   isFixed: boolean;
