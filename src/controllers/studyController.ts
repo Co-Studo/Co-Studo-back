@@ -6,6 +6,12 @@ import * as studyService from '@services/studyService';
 import { FirebaseError } from 'firebase-admin';
 import { authService } from 'src/firebaseApp';
 
+export const getStudyById = sendMethodResult(async (req) => {
+  const { studyId } = req.params;
+  const study = await studyService.getStudyById(studyId);
+  return study;
+});
+
 export const patchStudy = sendMethodResult(async (req) => {
   const {
     body: { tagIds, ...updateStudyInput },

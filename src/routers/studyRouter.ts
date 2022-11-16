@@ -7,6 +7,7 @@ import { postTag } from '@controllers/study/tagController';
 import {
   getStudies,
   getStudiesMine,
+  getStudyById,
   patchStudy,
   postStudy,
 } from '@controllers/studyController';
@@ -47,6 +48,26 @@ studyRouter.get('/', getStudies);
  *         description: 스터디 목록 조회 성공
  */
 studyRouter.get('/mine', getStudiesMine);
+
+/**
+ * @openapi
+ * /study/{studyId}:
+ *   get:
+ *     tags: [Study]
+ *     description: 스터디 조회
+ *     parameters:
+ *        - in: path
+ *          name: studyId
+ *          description: 스터디 아이디
+ *          required: true
+ *          default: wtWERTOmEgPTdh91BanU
+ *          schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: 스터디 목록 조회 성공
+ */
+studyRouter.get('/:studyId', getStudyById);
 
 // POST
 studyRouter.post('/', postStudy);

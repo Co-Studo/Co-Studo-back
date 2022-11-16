@@ -5,6 +5,14 @@ import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
 
+export const getStudyById = async (studyId: string) => {
+  const studyDoc = await studyRef.doc(studyId).get();
+  if (!studyDoc.exists) {
+    throw new NoMatchingDocuments('getStudyById');
+  }
+  return studyDoc.data();
+};
+
 export const updateStudy = async (
   studyId: string,
   studyInput: UpdateStudyInput
