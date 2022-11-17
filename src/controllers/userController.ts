@@ -13,6 +13,11 @@ export const getTempUserToken = async (): Promise<string> => {
 export const getUsers = async (): Promise<UserOutput[]> =>
   userService.getUsers();
 
+export const getUser = async (req: Request): Promise<UserOutput> => {
+  const { userId } = req.params;
+  return userService.getUser(userId);
+};
+
 export const getUserByEmail = async (req: Request) => {
   const { email } = req.params;
   return authService.getUserByEmail(email);

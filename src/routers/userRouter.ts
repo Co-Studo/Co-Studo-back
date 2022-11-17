@@ -1,6 +1,7 @@
 import { sendMethodResult } from '@common/utils';
 import {
   getTempUserToken,
+  getUser,
   getUsers,
   postUser,
 } from '@controllers/userController';
@@ -26,6 +27,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // GET
 userRouter.get('/', sendMethodResult(getUsers));
+
+userRouter.get('/:userId', sendMethodResult(getUser));
 
 // POST
 userRouter.post('/', sendMethodResult(postUser));

@@ -1,9 +1,11 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
 import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
+import { User } from '@entities/user.entity';
 import * as userService from '@services/userService';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
+const userRef = db.collection('user');
 
 export const getStudyById = async (studyId: string) => {
   const studyDoc = await studyRef.doc(studyId).get();
@@ -56,9 +58,11 @@ export const getStudies = async (recruiting: boolean) => {
 };
 
 export const getStudiesMine = async (uid: string) => {
-  const user = await userService.getUser(uid);
+  const userEntity = await userRef.doc(uid).get();
+  const { studyIds } = userEntity.data() as User;
+
   const snapshots = await Promise.all(
-    user.studyIds.map((studyId) => studyRef.doc(studyId).get())
+    studyIds.map((studyId) => studyRef.doc(studyId).get())
   );
   return snapshots.map((snapshot) => ({
     id: snapshot.id,

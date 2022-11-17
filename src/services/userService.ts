@@ -1,23 +1,18 @@
 import { UserOutput } from '@dtos/user/user.dto';
-import { User } from '@entities/user.entity';
 import { UserRecord } from 'firebase-admin/auth';
 import { authService, db } from 'src/firebaseApp';
 
 const userRef = db.collection('user');
 
 // ---- GET ----
-export const getUser = async (uid: string): Promise<User> => {
-  const snapshot = await userRef.doc(uid).get();
-  if (!snapshot.exists) {
-    throw new Error('No matching documents.');
-  }
+export const getUser = async (uid: string): Promise<UserOutput> => {
+  const { photoURL, displayName } = await authService.getUser(uid);
 
-  const user = {
-    id: snapshot.id,
-    ...snapshot.data(),
-  } as User;
-
-  return user;
+  return {
+    id: uid,
+    photoURL,
+    displayName,
+  };
 };
 
 export const getUsers = async (): Promise<UserOutput[]> => {
