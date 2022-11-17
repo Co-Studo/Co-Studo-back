@@ -49,7 +49,6 @@ studyRouter.get('/', sendMethodResult(getStudies));
  *         description: 스터디 목록 조회 성공
  */
 studyRouter.get('/mine', sendMethodResult(getStudiesMine));
-
 /**
  * @openapi
  * /study/{studyId}:
