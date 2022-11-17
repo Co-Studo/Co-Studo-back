@@ -14,8 +14,8 @@ export const getUsers = async (): Promise<UserOutput[]> =>
   userService.getUsers();
 
 export const getUser = async (req: Request): Promise<UserOutput> => {
-  const { userId } = req.params;
-  return userService.getUser(userId);
+  const { uid } = req.params;
+  return userService.getUser(uid);
 };
 
 export const getUserByEmail = async (req: Request) => {

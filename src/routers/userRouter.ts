@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
 // GET
 userRouter.get('/', sendMethodResult(getUsers));
 
-userRouter.get('/:userId', sendMethodResult(getUser));
+userRouter.get('/:uid', sendMethodResult(getUser));
 
 // POST
 userRouter.post('/', sendMethodResult(postUser));
