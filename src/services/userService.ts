@@ -29,7 +29,6 @@ export const getUsers = async (): Promise<UserOutput[]> => {
 };
 
 // ---- POST ----
-export const createUser = async (uId: string) => {
-  const newUser = await userRef.doc(uId).set({ studyIds: [] });
-  return newUser;
+export const createUser = async (uid: string): Promise<void> => {
+  await userRef.doc(uid).set({ studyIds: [] });
 };

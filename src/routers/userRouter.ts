@@ -3,7 +3,7 @@ import {
   getTempUserToken,
   getUser,
   getUsers,
-  postUser,
+  createUser,
 } from '@controllers/userController';
 import express from 'express';
 
@@ -31,6 +31,6 @@ userRouter.get('/', sendMethodResult(getUsers));
 userRouter.get('/:uid', sendMethodResult(getUser));
 
 // POST
-userRouter.post('/', sendMethodResult(postUser));
+userRouter.post('/', sendMethodResult(createUser));
 
 export default userRouter;

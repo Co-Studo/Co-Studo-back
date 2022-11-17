@@ -1,47 +1,12 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
 import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
 import { User } from '@entities/user.entity';
-import * as userService from '@services/userService';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
 const userRef = db.collection('user');
 
-export const getStudyById = async (studyId: string) => {
-  const studyDoc = await studyRef.doc(studyId).get();
-  if (!studyDoc.exists) {
-    throw new NoMatchingDocuments('getStudyById');
-  }
-  return studyDoc.data();
-};
-
-export const updateStudy = async (
-  studyId: string,
-  studyInput: UpdateStudyInput
-) => {
-  const study = await studyRef.doc(studyId).update(studyInput);
-  return study;
-};
-
-export const createStudy = async (studyInput: CreateStudyInput) => {
-  const defaultStudyInput = {
-    isPublic: true,
-    isRecruiting: true,
-    startedAt: new Date(),
-    tags: [],
-  };
-
-  const newStudyInput: CreateStudyInput = {
-    ...defaultStudyInput,
-    ...studyInput,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
-  const study = await studyRef.add(newStudyInput);
-  return study;
-};
-
+// ---- GET ----
 export const getStudies = async (recruiting: boolean) => {
   const snapshot = await studyRef.get();
   if (snapshot.empty) {
@@ -68,4 +33,42 @@ export const getStudiesMine = async (uid: string) => {
     id: snapshot.id,
     ...snapshot.data(),
   }));
+};
+
+export const getStudyById = async (studyId: string) => {
+  const studyDoc = await studyRef.doc(studyId).get();
+  if (!studyDoc.exists) {
+    throw new NoMatchingDocuments('getStudyById');
+  }
+  return studyDoc.data();
+};
+
+// ---- POST ----
+export const createStudy = async (
+  studyInput: CreateStudyInput
+): Promise<void> => {
+  const defaultStudyInput = {
+    isPublic: true,
+    isRecruiting: true,
+    startedAt: new Date(),
+    tags: [],
+  };
+
+  const newStudyInput: CreateStudyInput = {
+    ...defaultStudyInput,
+    ...studyInput,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  await studyRef.add(newStudyInput);
+};
+
+// ---- PATCH ----
+export const updateStudy = async (
+  studyId: string,
+  studyInput: UpdateStudyInput
+) => {
+  const study = await studyRef.doc(studyId).update(studyInput);
+  return study;
 };

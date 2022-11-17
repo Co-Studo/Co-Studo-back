@@ -3,6 +3,7 @@ import * as userService from '@services/userService';
 import { Request } from 'express';
 import { authService, createIdTokenFromCustomToken } from 'src/firebaseApp';
 
+// ---- GET ----
 export const getTempUserToken = async (): Promise<string> => {
   const token = await createIdTokenFromCustomToken(
     'drArNNfiuFf4UhpLhDiBK0Q41c22'
@@ -23,7 +24,8 @@ export const getUserByEmail = async (req: Request) => {
   return authService.getUserByEmail(email);
 };
 
-export const postUser = async (req: Request) => {
+// --- POST ----
+export const createUser = async (req: Request) => {
   const {
     body: { uid },
   } = req;

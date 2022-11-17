@@ -1,3 +1,4 @@
+import { sendMethodResult } from '@common/utils';
 import {
   getAnnouncementsByStudyId,
   patchAnnouncement,
@@ -9,7 +10,7 @@ import {
   getStudiesMine,
   getStudyById,
   patchStudy,
-  postStudy,
+  createStudy,
 } from '@controllers/studyController';
 import express from 'express';
 
@@ -33,7 +34,7 @@ const studyRouter = express.Router();
  *       200:
  *         description: 스터디 목록 조회 성공
  */
-studyRouter.get('/', getStudies);
+studyRouter.get('/', sendMethodResult(getStudies));
 
 /**
  * @openapi
@@ -47,7 +48,7 @@ studyRouter.get('/', getStudies);
  *       200:
  *         description: 스터디 목록 조회 성공
  */
-studyRouter.get('/mine', getStudiesMine);
+studyRouter.get('/mine', sendMethodResult(getStudiesMine));
 
 /**
  * @openapi
@@ -71,16 +72,16 @@ studyRouter.get('/mine', getStudiesMine);
  *           schema:
  *            $ref: '#/components/schemas/Study'
  */
-studyRouter.get('/:studyId', getStudyById);
+studyRouter.get('/:studyId', sendMethodResult(getStudyById));
 
 // POST
-studyRouter.post('/', postStudy);
+studyRouter.post('/', sendMethodResult(createStudy));
 
 // PATCH
-studyRouter.patch('/:studyId', patchStudy);
+studyRouter.patch('/:studyId', sendMethodResult(patchStudy));
 
 // ----------- tag -------------- //
-studyRouter.post('/tag', postTag);
+studyRouter.post('/tag', sendMethodResult(postTag));
 
 // ----------- announcement -------------- //
 /**
@@ -107,8 +108,14 @@ studyRouter.post('/tag', postTag);
  *       200:
  *         description: 스터디 공지사항 목록 조회 성공
  */
-studyRouter.get('/:studyId/announcement', getAnnouncementsByStudyId);
-studyRouter.post('/:studyId/announcement', postAnnouncement);
-studyRouter.patch('/:studyId/announcement/:announcementId', patchAnnouncement);
+studyRouter.get(
+  '/:studyId/announcement',
+  sendMethodResult(getAnnouncementsByStudyId)
+);
+studyRouter.post('/:studyId/announcement', sendMethodResult(postAnnouncement));
+studyRouter.patch(
+  '/:studyId/announcement/:announcementId',
+  sendMethodResult(patchAnnouncement)
+);
 
 export default studyRouter;
