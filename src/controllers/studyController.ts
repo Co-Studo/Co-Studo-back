@@ -4,7 +4,6 @@ import { CreateStudyInput } from '@dtos/study.dto';
 import * as tagService from '@services/study/tagService';
 import * as studyService from '@services/studyService';
 import { Request } from 'express';
-import { FirebaseError } from 'firebase-admin';
 import { authService } from 'src/firebaseApp';
 
 // ---- GET ----
@@ -17,26 +16,6 @@ export const getStudiesMine = useAuth(async (req) => {
   const { uid } = req.user;
   return studyService.getStudiesMine(uid);
 });
-
-// export const getStudiesMine = async (req: Request) => {
-//   try {
-//     const { authorization } = req.headers;
-//     const accessToken = authorization?.split(' ')[1];
-
-//     if (!accessToken) {
-//       throw new Error('accessToken is required');
-//     }
-//     const { uid } = await authService.verifyIdToken(accessToken);
-//     return await studyService.getStudiesMine(uid);
-//   } catch (e) {
-//     const error = e as FirebaseError;
-//     if (error.code === 'auth/id-token-expired') {
-//       throw new IdTokenExpired();
-//     } else {
-//       throw new Error(error.message);
-//     }
-//   }
-// };
 
 export const getStudyById = async (req: Request) => {
   const { studyId } = req.params;
