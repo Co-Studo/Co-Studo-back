@@ -1,9 +1,7 @@
 import { CoreEntity } from '@entities/core.entity';
-import { Tag } from '@entities/tag.entity';
-import { AuthUser } from '@entities/user.entity';
 
 /**
- * @swagger
+ * @openapi
  *  components:
  *   schemas:
  *    Study:
@@ -19,8 +17,23 @@ import { AuthUser } from '@entities/user.entity';
  *       type: string
  *       description: 스터디 설명
  *      owner:
- *       type: $ref: '#/components/schemas/User'
+ *       type: object
+ *       properties:
+ *        id:
+ *         type: string
+ *        photoURL:
+ *         type: string
  *       description: 스터디장
+ *      participants:
+ *       type: array
+ *       items:
+ *        type: object
+ *        properties:
+ *         id:
+ *          type: string
+ *         photoURL:
+ *          type: string
+ *        description: 스터디원
  *      maxParticipants:
  *       type: number
  *       description: 최대 참여자 수
@@ -47,7 +60,10 @@ import { AuthUser } from '@entities/user.entity';
  *      tags:
  *       type: array
  *       items:
- *        $ref: '#/components/schemas/Tag'
+ *        type: object
+ *        properties:
+ *         name:
+ *          type: string
  *      isRequireCheckIn:
  *       type: boolean
  *       description: 체크인 필수 여부
@@ -76,10 +92,10 @@ export type Study = {
   title: string;
   shortDescription: string;
   description: string;
-  owner: AuthUser;
-  participants: AuthUser[];
+  ownerId: string;
+  participantIds: string[];
   maxParticipants?: number;
-  tags: Tag[];
+  tagIds: string[];
   isRecruiting: boolean;
   isPublic: boolean;
   startedAt: Date;
