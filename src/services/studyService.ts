@@ -1,6 +1,10 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
 import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
+import { UserOutput } from '@dtos/user/user.dto';
+import { Study } from '@entities/study.entity';
 import { User } from '@entities/user.entity';
+import * as tagService from '@services/study/tagService';
+import * as userService from '@services/userService';
 import { db } from 'src/firebaseApp';
 
 const studyRef = db.collection('study');
@@ -12,27 +16,30 @@ export const getStudies = async (recruiting: boolean) => {
   if (snapshot.empty) {
     throw new NoMatchingDocuments('getStudies');
   }
-  const datas: FirebaseFirestore.DocumentData[] = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+
+  const datas = await Promise.all(
+    snapshot.docs.map(async (doc) => {
+      const data = doc.data() as Study;
+      const { tagIds, participantIds, ownerId, ...rest } = data;
+
+      const tags = await Promise.all(
+        tagIds.map((tagId) => tagService.getTagById(tagId))
+      );
+      const participants = await Promise.all(
+        participantIds.map((participantId) =>
+          userService.getUser(participantId)
+        )
+      );
+      const owner = await userService.getUser(ownerId);
+
+      return { id: doc.id, tags, participants, owner, ...rest };
+    })
+  );
+
   if (recruiting) {
     return datas.filter((data) => data.isRecruiting);
   }
   return datas;
-};
-
-export const getStudiesMine = async (uid: string) => {
-  const userEntity = await userRef.doc(uid).get();
-  const { studyIds } = userEntity.data() as User;
-
-  const snapshots = await Promise.all(
-    studyIds.map((studyId) => studyRef.doc(studyId).get())
-  );
-  return snapshots.map((snapshot) => ({
-    id: snapshot.id,
-    ...snapshot.data(),
-  }));
 };
 
 export const getStudyById = async (studyId: string) => {
@@ -40,21 +47,43 @@ export const getStudyById = async (studyId: string) => {
   if (!studyDoc.exists) {
     throw new NoMatchingDocuments('getStudyById');
   }
-  return studyDoc.data();
+  const data = studyDoc.data() as Study;
+  const { tagIds, participantIds, ownerId, ...rest } = data;
+
+  const tags = await Promise.all(
+    tagIds.map((tagId) => tagService.getTagById(tagId))
+  );
+  const participants = await Promise.all(
+    participantIds.map((participantId) => userService.getUser(participantId))
+  );
+  const owner = await userService.getUser(ownerId);
+
+  return { id: studyDoc.id, tags, participants, owner, ...rest };
+};
+
+export const getStudiesMine = async (uid: string) => {
+  const userEntity = await userRef.doc(uid).get();
+  const { studyIds } = userEntity.data() as User;
+
+  const studies = await Promise.all(
+    studyIds.map((studyId) => getStudyById(studyId))
+  );
+  return studies;
 };
 
 // ---- POST ----
 export const createStudy = async (
-  studyInput: CreateStudyInput
+  studyInput: CreateStudyInput & { ownerId: string }
 ): Promise<void> => {
   const defaultStudyInput = {
     isPublic: true,
     isRecruiting: true,
     startedAt: new Date(),
-    tags: [],
+    tagIds: [],
+    participantIds: [],
   };
 
-  const newStudyInput: CreateStudyInput = {
+  const newStudyInput = {
     ...defaultStudyInput,
     ...studyInput,
     createdAt: new Date(),

@@ -4,6 +4,7 @@ import {
   getUser,
   getUsers,
   createUser,
+  updateUser,
 } from '@controllers/userController';
 import express from 'express';
 
@@ -32,5 +33,8 @@ userRouter.get('/:uid', sendMethodResult(getUser));
 
 // POST
 userRouter.post('/', sendMethodResult(createUser));
+
+// PATCH
+userRouter.patch('/:uid', sendMethodResult(updateUser));
 
 export default userRouter;

@@ -18,7 +18,7 @@ export const sendMethodResult =
       const results = await callback(req, res, next);
       res.send(results);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   };
 

@@ -1,9 +1,9 @@
-import IdTokenExpired from '@common/exceptions/id-token-expired';
 import { useAuth } from '@common/utils';
 import { CreateStudyInput } from '@dtos/study.dto';
 import * as tagService from '@services/study/tagService';
 import * as studyService from '@services/studyService';
 import { Request } from 'express';
+import { UserRecord } from 'firebase-admin/auth';
 import { authService } from 'src/firebaseApp';
 
 // ---- GET ----
@@ -24,26 +24,18 @@ export const getStudyById = async (req: Request) => {
 };
 
 // ---- POST ----
-export const createStudy = async (req: Request) => {
-  const tempUser = await authService.getUserByEmail('test@test.com');
-  const owner = tempUser;
+export const createStudy = useAuth(async (req) => {
   const {
-    body: { tagIds, ...restInput },
-  } = req;
+    body: createStudyInput,
+    user: { uid },
+  }: { body: CreateStudyInput; user: UserRecord } = req;
 
-  const tags = tagIds
-    ? await Promise.all(
-        tagIds.map((tagId: string) => tagService.getTagById(tagId))
-      )
-    : [];
-
-  const studyInput: CreateStudyInput = {
-    owner,
-    tags,
-    ...restInput,
+  const studyInput = {
+    ownerId: uid,
+    ...createStudyInput,
   };
   return studyService.createStudy(studyInput);
-};
+});
 
 // ---- PATCH ----
 export const patchStudy = async (req: Request) => {

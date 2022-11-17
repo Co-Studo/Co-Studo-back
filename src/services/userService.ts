@@ -1,3 +1,4 @@
+import { UpdateUserInput } from '@dtos/user/update-user.dto';
 import { UserOutput } from '@dtos/user/user.dto';
 import { UserRecord } from 'firebase-admin/auth';
 import { authService, db } from 'src/firebaseApp';
@@ -31,4 +32,13 @@ export const getUsers = async (): Promise<UserOutput[]> => {
 // ---- POST ----
 export const createUser = async (uid: string): Promise<void> => {
   await userRef.doc(uid).set({ studyIds: [] });
+};
+
+// ---- PATCH ----
+export const updateUser = async (
+  uid: string,
+  updateUserInput: UpdateUserInput
+): Promise<void> => {
+  const { photoURL, displayName } = updateUserInput;
+  await authService.updateUser(uid, { photoURL, displayName });
 };
