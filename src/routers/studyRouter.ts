@@ -65,7 +65,11 @@ studyRouter.get('/mine', getStudiesMine);
  *           type: string
  *     responses:
  *       200:
- *         description: 스터디 목록 조회 성공
+ *        description: 스터디 조회 성공
+ *        content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/components/schemas/Study'
  */
 studyRouter.get('/:studyId', getStudyById);
 

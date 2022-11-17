@@ -1,3 +1,4 @@
+import { sendMethodResult } from '@common/utils';
 import {
   getTempUserToken,
   getUsers,
@@ -20,13 +21,13 @@ if (process.env.NODE_ENV === 'development') {
    *       200:
    *         description: 임시 유저 조회 성공
    */
-  userRouter.get('/temp', getTempUserToken);
+  userRouter.get('/temp', sendMethodResult(getTempUserToken));
 }
 
 // GET
-userRouter.get('/', getUsers);
+userRouter.get('/', sendMethodResult(getUsers));
 
 // POST
-userRouter.post('/', postUser);
+userRouter.post('/', sendMethodResult(postUser));
 
 export default userRouter;
