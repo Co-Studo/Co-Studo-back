@@ -21,12 +21,14 @@ export const getUser = async (req: Request): Promise<UserOutput> => {
   return userService.getUser(uid);
 };
 
+// TODO: 필요성 확인
 export const getUserByEmail = async (req: Request) => {
   const { email } = req.params;
   return authService.getUserByEmail(email);
 };
 
 // --- POST ----
+// TODO: auth 생성시 trigger 로 생성?
 export const createUser = async (req: Request) => {
   const {
     body: { uid },

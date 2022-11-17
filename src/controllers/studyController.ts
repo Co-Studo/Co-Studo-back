@@ -4,7 +4,6 @@ import * as tagService from '@services/study/tagService';
 import * as studyService from '@services/studyService';
 import { Request } from 'express';
 import { UserRecord } from 'firebase-admin/auth';
-import { authService } from 'src/firebaseApp';
 
 // ---- GET ----
 export const getStudies = async (req: Request) => {
@@ -38,6 +37,7 @@ export const createStudy = useAuth(async (req) => {
 });
 
 // ---- PATCH ----
+// 수정 필요
 export const patchStudy = async (req: Request) => {
   const {
     body: { tagIds, ...updateStudyInput },

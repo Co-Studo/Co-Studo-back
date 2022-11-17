@@ -60,7 +60,7 @@ studyRouter.get('/mine', sendMethodResult(getStudiesMine));
  *          name: studyId
  *          description: 스터디 아이디
  *          required: true
- *          default: wtWERTOmEgPTdh91BanU
+ *          default: NcTdHUJPVQdBWy0rkI0G
  *          schema:
  *           type: string
  *     responses:
@@ -74,6 +74,54 @@ studyRouter.get('/mine', sendMethodResult(getStudiesMine));
 studyRouter.get('/:studyId', sendMethodResult(getStudyById));
 
 // POST
+/**
+ * @openapi
+ * /study:
+ *   post:
+ *     tags: [Study]
+ *     description: 스터디 생성
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *          schema:
+ *           type: object
+ *           properties:
+ *            title:
+ *             type: string
+ *            shortDescription:
+ *             type: string
+ *            description:
+ *             type: string
+ *            maxParticipants:
+ *             type: number
+ *            tagIds:
+ *             type: array
+ *             items:
+ *              type: string
+ *            isPublic:
+ *             type: boolean
+ *            endedAt:
+ *             type: string
+ *            isRequireCheckIn:
+ *             type: boolean
+ *            isRequireCheckOut:
+ *             type: boolean
+ *            isCheckOutIsArticle:
+ *             type: boolean
+ *           required:
+ *            - title
+ *            - shortDescription
+ *            - description
+ *            - isPublic
+ *            - isRequireCheckIn
+ *            - isRequireCheckOut
+ *            - isCheckOutIsArticle
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *        description: 수정 완료
+ */
 studyRouter.post('/', sendMethodResult(createStudy));
 
 // PATCH
@@ -94,7 +142,7 @@ studyRouter.post('/tag', sendMethodResult(postTag));
  *          name: studyId
  *          description: 스터디 아이디
  *          required: true
- *          default: wtWERTOmEgPTdh91BanU
+ *          default: NcTdHUJPVQdBWy0rkI0G
  *          schema:
  *           type: string
  *        - in: query

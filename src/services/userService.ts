@@ -30,6 +30,7 @@ export const getUsers = async (): Promise<UserOutput[]> => {
 };
 
 // ---- POST ----
+// TODO: auth 생성시 trigger 로 생성?
 export const createUser = async (uid: string): Promise<void> => {
   await userRef.doc(uid).set({ studyIds: [] });
 };

@@ -1,6 +1,5 @@
 import NoMatchingDocuments from '@common/exceptions/no-matching-documents';
 import { CreateStudyInput, UpdateStudyInput } from '@dtos/study.dto';
-import { UserOutput } from '@dtos/user/user.dto';
 import { Study } from '@entities/study.entity';
 import { User } from '@entities/user.entity';
 import * as tagService from '@services/study/tagService';
@@ -61,6 +60,7 @@ export const getStudyById = async (studyId: string) => {
   return { id: studyDoc.id, tags, participants, owner, ...rest };
 };
 
+// TODO: 테스트 필요
 export const getStudiesMine = async (uid: string) => {
   const userEntity = await userRef.doc(uid).get();
   const { studyIds } = userEntity.data() as User;
@@ -83,9 +83,12 @@ export const createStudy = async (
     participantIds: [],
   };
 
+  const { tagIds, ...restInput } = studyInput;
+
   const newStudyInput = {
     ...defaultStudyInput,
-    ...studyInput,
+    tagIds: tagIds || defaultStudyInput.tagIds,
+    ...restInput,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -94,6 +97,7 @@ export const createStudy = async (
 };
 
 // ---- PATCH ----
+// TODO: 수정필요
 export const updateStudy = async (
   studyId: string,
   studyInput: UpdateStudyInput
