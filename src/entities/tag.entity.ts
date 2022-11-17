@@ -2,7 +2,7 @@ import { CoreEntity } from '@entities/core.entity';
 import { Study } from '@entities/study.entity';
 
 /**
- * @swagger
+ * @openapi
  *  components:
  *   schemas:
  *    Tag:
@@ -11,10 +11,10 @@ import { Study } from '@entities/study.entity';
  *      name:
  *       type: string
  *       description: 태그명
- *      studies:
+ *      studyIds:
  *       type: array
  *       items:
- *        $ref: '#/components/schemas/Study'
+ *        type: string
  *      createdAt:
  *       type: object
  *       properties:
@@ -32,5 +32,5 @@ import { Study } from '@entities/study.entity';
  */
 export type Tag = {
   name: string;
-  studies: Study[];
+  studyIds: string[];
 } & CoreEntity;

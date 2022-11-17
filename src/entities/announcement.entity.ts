@@ -1,8 +1,7 @@
 import { CoreEntity } from '@entities/core.entity';
-import { User } from '@entities/user.entity';
 
 /**
- * @swagger
+ * @openapi
  *  components:
  *   schemas:
  *    Announcement:
@@ -11,7 +10,7 @@ import { User } from '@entities/user.entity';
  *      order:
  *       type: string
  *       description: 글 등록 순서
- *      writer:
+ *      writerId:
  *       type: string
  *      title:
  *       type: string
@@ -34,10 +33,9 @@ import { User } from '@entities/user.entity';
  *        _nanoseconds:
  *         type: number
  */
-
 export type Announcement = {
   order: number;
-  writer: string;
+  writerId: string;
   title: string;
   content: string;
   isFixed: boolean;

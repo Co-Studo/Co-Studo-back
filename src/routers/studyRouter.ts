@@ -1,3 +1,4 @@
+import { sendMethodResult } from '@common/utils';
 import {
   getAnnouncementsByStudyId,
   patchAnnouncement,
@@ -7,8 +8,9 @@ import { postTag } from '@controllers/study/tagController';
 import {
   getStudies,
   getStudiesMine,
+  getStudyById,
   patchStudy,
-  postStudy,
+  createStudy,
 } from '@controllers/studyController';
 import express from 'express';
 
@@ -32,7 +34,7 @@ const studyRouter = express.Router();
  *       200:
  *         description: 스터디 목록 조회 성공
  */
-studyRouter.get('/', getStudies);
+studyRouter.get('/', sendMethodResult(getStudies));
 
 /**
  * @openapi
@@ -46,16 +48,87 @@ studyRouter.get('/', getStudies);
  *       200:
  *         description: 스터디 목록 조회 성공
  */
-studyRouter.get('/mine', getStudiesMine);
+studyRouter.get('/mine', sendMethodResult(getStudiesMine));
+/**
+ * @openapi
+ * /study/{studyId}:
+ *   get:
+ *     tags: [Study]
+ *     description: 스터디 조회
+ *     parameters:
+ *        - in: path
+ *          name: studyId
+ *          description: 스터디 아이디
+ *          required: true
+ *          default: NcTdHUJPVQdBWy0rkI0G
+ *          schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *        description: 스터디 조회 성공
+ *        content:
+ *          application/json:
+ *           schema:
+ *            $ref: '#/components/schemas/Study'
+ */
+studyRouter.get('/:studyId', sendMethodResult(getStudyById));
 
 // POST
-studyRouter.post('/', postStudy);
+/**
+ * @openapi
+ * /study:
+ *   post:
+ *     tags: [Study]
+ *     description: 스터디 생성
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *          schema:
+ *           type: object
+ *           properties:
+ *            title:
+ *             type: string
+ *            shortDescription:
+ *             type: string
+ *            description:
+ *             type: string
+ *            maxParticipants:
+ *             type: number
+ *            tagIds:
+ *             type: array
+ *             items:
+ *              type: string
+ *            isPublic:
+ *             type: boolean
+ *            endedAt:
+ *             type: string
+ *            isRequireCheckIn:
+ *             type: boolean
+ *            isRequireCheckOut:
+ *             type: boolean
+ *            isCheckOutIsArticle:
+ *             type: boolean
+ *           required:
+ *            - title
+ *            - shortDescription
+ *            - description
+ *            - isPublic
+ *            - isRequireCheckIn
+ *            - isRequireCheckOut
+ *            - isCheckOutIsArticle
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *        description: 수정 완료
+ */
+studyRouter.post('/', sendMethodResult(createStudy));
 
 // PATCH
-studyRouter.patch('/:studyId', patchStudy);
+studyRouter.patch('/:studyId', sendMethodResult(patchStudy));
 
 // ----------- tag -------------- //
-studyRouter.post('/tag', postTag);
+studyRouter.post('/tag', sendMethodResult(postTag));
 
 // ----------- announcement -------------- //
 /**
@@ -69,7 +142,7 @@ studyRouter.post('/tag', postTag);
  *          name: studyId
  *          description: 스터디 아이디
  *          required: true
- *          default: wtWERTOmEgPTdh91BanU
+ *          default: NcTdHUJPVQdBWy0rkI0G
  *          schema:
  *           type: string
  *        - in: query
@@ -82,8 +155,14 @@ studyRouter.post('/tag', postTag);
  *       200:
  *         description: 스터디 공지사항 목록 조회 성공
  */
-studyRouter.get('/:studyId/announcement', getAnnouncementsByStudyId);
-studyRouter.post('/:studyId/announcement', postAnnouncement);
-studyRouter.patch('/:studyId/announcement/:announcementId', patchAnnouncement);
+studyRouter.get(
+  '/:studyId/announcement',
+  sendMethodResult(getAnnouncementsByStudyId)
+);
+studyRouter.post('/:studyId/announcement', sendMethodResult(postAnnouncement));
+studyRouter.patch(
+  '/:studyId/announcement/:announcementId',
+  sendMethodResult(patchAnnouncement)
+);
 
 export default studyRouter;
